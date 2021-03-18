@@ -32,9 +32,11 @@ public class ExpireRedisCacheManager extends RedisCacheManager {
         this.defaultCacheConfiguration = defaultCacheConfiguration;
     }
 
-    public Cache getCache(String name, CacheOperationInvocationContext<?> context) {
+    @Override
+    public Cache getCache(String name) {
+        Cache cache = super.getCache(name);
+        CacheOperationInvocationContext<?> context = CacheOperationInvocationContextHolder.context();
         Method targetMethod = ReflectionUtils.findMethod(context.getTarget().getClass(), context.getMethod().getName());
-        Cache cache = getCache(name);
         if (targetMethod.isAnnotationPresent(CacheExpire.class)) {
             CacheExpire cacheExpire = AnnotationUtils.getAnnotation(targetMethod, CacheExpire.class);
             if (cache instanceof RedisCache) {
