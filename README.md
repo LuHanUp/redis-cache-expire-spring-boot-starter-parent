@@ -1,37 +1,47 @@
 # redis-cache-expire-spring-boot-starter-parent
 
 #### 介绍
-使用redis作为spring cache组件，并且可以自定义过期时间
+使用`redis`作为`spring cache`组件，并且可以**自定义过期时间**
+
+1. 支持**方法级别**设置过期时间
 
 #### 软件架构
-软件架构说明
-
-
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+在`spring-boot-starter-data-redis`基础上改变了`RedisCacheManager`其`getCache`原始行为
+在其基础上添加设置自定义过期时间的功能
 
 #### 使用说明
+因为`redis-cache-expire-spring-boot-starter`并没有集成`spring-boot-starter-data-redis`所以需要
+手动引入依赖
+> 主要是为了方便使用各自的`spring-boot-starter-data-redis`版本
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  引入`spring-boot-starter-data-redis`依赖
+~~~xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+~~~
+2.  引入本starter依赖
+~~~xml
+<dependency>
+    <groupId>top.luhancc.redis</groupId>
+    <artifactId>redis-cache-expire-spring-boot-starter</artifactId>
+</dependency>
+~~~
+3.  和使用`spring cache`一样 使用`@EnableCaching`开启缓存即可
+~~~java
+@SpringBootApplication
+@EnableCaching
+public class RedisCacheExpireApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(RedisCacheExpireApplication.class, args);
+    }
+}
+~~~
 
 #### 参与贡献
 
 1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
+2.  新建 feature/xxx 分支
 3.  提交代码
 4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
