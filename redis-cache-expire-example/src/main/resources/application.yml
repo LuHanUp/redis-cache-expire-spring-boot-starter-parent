@@ -1,0 +1,5 @@
+spring:
+  cache:
+    type: redis
+  redis:
+    host: 192.168.2.141
