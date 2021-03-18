@@ -5,10 +5,13 @@ import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.interceptor.CacheResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import top.luhancc.redis.cache.core.ExpireRedisCacheManager;
 import top.luhancc.redis.cache.core.RedisExpireCacheResolver;
+
+import java.lang.reflect.Field;
 
 /**
  * redis cache expire组件配置类
@@ -18,12 +21,19 @@ import top.luhancc.redis.cache.core.RedisExpireCacheResolver;
  * @since 1.0.0
  */
 public class RedisCacheExpireConfiguration extends CachingConfigurerSupport {
-    private final RedisCacheConfiguration redisCacheConfiguration;
-    private final RedisConnectionFactory redisConnectionFactory;
+    private final RedisCacheManager redisCacheManager;
+    private static volatile ExpireRedisCacheManager redisCacheManagerWrapper;
 
     @Override
     public CacheManager cacheManager() {
-        return new ExpireRedisCacheManager(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory), redisCacheConfiguration);
+        if (redisCacheManagerWrapper == null) {
+            synchronized (RedisCacheExpireConfiguration.class) {
+                if (redisCacheManagerWrapper == null) {
+                    redisCacheManagerWrapper = new ExpireRedisCacheManager(redisCacheWriter(), redisCacheConfiguration());
+                }
+            }
+        }
+        return redisCacheManagerWrapper;
     }
 
     @Bean(name = "redisExpireCacheResolver")
@@ -34,8 +44,34 @@ public class RedisCacheExpireConfiguration extends CachingConfigurerSupport {
         return redisExpireCacheResolver;
     }
 
-    public RedisCacheExpireConfiguration(RedisConnectionFactory redisConnectionFactory, RedisCacheConfiguration redisCacheConfiguration) {
-        this.redisConnectionFactory = redisConnectionFactory;
-        this.redisCacheConfiguration = redisCacheConfiguration;
+    public RedisCacheExpireConfiguration(RedisCacheManager redisCacheManager) {
+        this.redisCacheManager = redisCacheManager;
     }
+
+    private RedisCacheWriter redisCacheWriter() {
+        try {
+            Field cacheWriterField = redisCacheManager.getClass().getDeclaredField("cacheWriter");
+            cacheWriterField.setAccessible(true);
+            return (RedisCacheWriter) cacheWriterField.get(redisCacheManager);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private RedisCacheConfiguration redisCacheConfiguration() {
+        try {
+            Field defaultCacheConfigField = redisCacheManager.getClass().getDeclaredField("defaultCacheConfig");
+            defaultCacheConfigField.setAccessible(true);
+            return (RedisCacheConfiguration) defaultCacheConfigField.get(redisCacheManager);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

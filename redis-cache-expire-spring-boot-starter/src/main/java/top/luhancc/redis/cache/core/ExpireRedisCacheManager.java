@@ -26,7 +26,8 @@ public class ExpireRedisCacheManager extends RedisCacheManager {
     private final Logger log = LoggerFactory.getLogger(ExpireRedisCacheManager.class);
     private final RedisCacheConfiguration defaultCacheConfiguration;
 
-    public ExpireRedisCacheManager(RedisCacheWriter cacheWriter, RedisCacheConfiguration defaultCacheConfiguration) {
+    public ExpireRedisCacheManager(RedisCacheWriter cacheWriter,
+                                   RedisCacheConfiguration defaultCacheConfiguration) {
         super(cacheWriter, defaultCacheConfiguration);
         this.defaultCacheConfiguration = defaultCacheConfiguration;
     }
@@ -41,7 +42,6 @@ public class ExpireRedisCacheManager extends RedisCacheManager {
                         .entryTtl(Duration.ofSeconds(cacheExpire.expire()))
                         .serializeKeysWith(defaultCacheConfiguration.getKeySerializationPair())
                         .serializeValuesWith(defaultCacheConfiguration.getValueSerializationPair());
-                log.info("对cache:[{}]进行包装,添加自定义过期时间:[{}]", cache, cacheConfiguration.getTtl());
                 return createRedisCache(name, cacheConfiguration);
             }
         }
