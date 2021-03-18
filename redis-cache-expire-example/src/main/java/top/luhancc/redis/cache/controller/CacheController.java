@@ -20,4 +20,9 @@ public class CacheController {
     public String data() {
         return cacheService.data();
     }
+
+    @RequestMapping("/data2")
+    public String data2() {
+        return cacheService.data2();
+    }
 }

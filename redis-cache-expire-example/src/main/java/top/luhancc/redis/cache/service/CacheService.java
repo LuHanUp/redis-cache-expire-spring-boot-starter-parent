@@ -18,4 +18,10 @@ public class CacheService {
         System.out.println("没走缓存,直接查询");
         return "hello this data is redis cache";
     }
+
+    @Cacheable(value = "cache-test", key = "targetClass + methodName")
+    public String data2() {
+        System.out.println("没走缓存,直接查询");
+        return "hello this data is redis cache is not expire";
+    }
 }
