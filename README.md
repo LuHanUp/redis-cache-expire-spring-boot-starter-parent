@@ -1,7 +1,9 @@
 # redis-cache-expire-spring-boot-starter-parent
 
+[English](README.en.md)
+
 #### 介绍
-使用`redis`作为`spring cache`组件，并且可以**自定义过期时间**
+当使用`redis`作为`spring cache`组件时，使用注解`@CacheExpire`支持**自定义过期时间**
 
 1. 支持**方法级别**设置过期时间
 2. 支持在类上添加注解，该类下的缓存方法通用过期时间

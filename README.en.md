@@ -1,8 +1,9 @@
 # redis-cache-expire-spring-boot-starter-parent
 
-#### Introduction
-Use `redis` as the `spring cache` component, and you can **customize the expiration time**
+[Chinese](README.md)
 
+#### Introduction
+When using `redis` as the `spring cache` component, use the annotation `@CacheExpire` to support **custom expiration time**
 1. Support **method level** to set expiration time
 2. Support adding annotations to the class, the general expiration time of the cache method under this class
 3. Support ignore function
