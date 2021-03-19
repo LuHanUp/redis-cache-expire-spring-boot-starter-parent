@@ -4,6 +4,8 @@
 使用`redis`作为`spring cache`组件，并且可以**自定义过期时间**
 
 1. 支持**方法级别**设置过期时间
+2. 支持在类上添加注解，该类下的缓存方法通用过期时间
+3. 支持忽略功能
 
 #### 软件架构
 在`spring-boot-starter-data-redis`基础上改变了`RedisCacheManager`其`getCache`原始行为
@@ -35,6 +37,40 @@
 public class RedisCacheExpireApplication {
     public static void main(String[] args) {
         SpringApplication.run(RedisCacheExpireApplication.class, args);
+    }
+}
+~~~
+
+#### 示例代码
+**方法级别**
+~~~java
+@Service
+public class CacheService {
+    @Cacheable(value = "cache-test", key = "targetClass + methodName")
+    @CacheExpire(value = 100)
+    public String data() {
+        System.out.println("没走缓存,直接查询");
+        return "hello this data is redis cache";
+    }
+    @Cacheable(value = "cache-test", key = "targetClass + methodName")
+    public String data2() {
+        System.out.println("没走缓存,直接查询");
+        return "hello this data is redis cache is not expire";
+    }
+}
+~~~
+**类级别**
+~~~java
+@CacheExpire
+@Cacheable(value = "cache-test2", key = "targetClass + methodName")
+@Service
+public class CacheService2 {
+    public String data4() {
+        return "this is cache data 2";
+    }
+    @CacheExpire(value = 10, ignore = true)
+    public String data3() {
+        return "this is cache data 3";
     }
 }
 ~~~
