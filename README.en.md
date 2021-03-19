@@ -3,7 +3,9 @@
 #### Introduction
 Use `redis` as the `spring cache` component, and you can **customize the expiration time**
 
-1. 支持**方法级别**设置过期时间
+1. Support **method level** to set expiration time
+2. Support adding annotations to the class, the general expiration time of the cache method under this class
+3. Support ignore function
 
 #### Software Architecture
 在`spring-boot-starter-data-redis`基础上改变了`RedisCacheManager`其`getCache`原始行为
@@ -35,6 +37,40 @@ Manually introduce dependencies
 public class RedisCacheExpireApplication {
     public static void main(String[] args) {
         SpringApplication.run(RedisCacheExpireApplication.class, args);
+    }
+}
+~~~
+
+#### example
+**method level**
+~~~java
+@Service
+public class CacheService {
+    @Cacheable(value = "cache-test", key = "targetClass + methodName")
+    @CacheExpire(value = 100)
+    public String data() {
+        System.out.println("没走缓存,直接查询");
+        return "hello this data is redis cache";
+    }
+    @Cacheable(value = "cache-test", key = "targetClass + methodName")
+    public String data2() {
+        System.out.println("没走缓存,直接查询");
+        return "hello this data is redis cache is not expire";
+    }
+}
+~~~
+**class level**
+~~~java
+@CacheExpire
+@Cacheable(value = "cache-test2", key = "targetClass + methodName")
+@Service
+public class CacheService2 {
+    public String data4() {
+        return "this is cache data 2";
+    }
+    @CacheExpire(value = 10, ignore = true)
+    public String data3() {
+        return "this is cache data 3";
     }
 }
 ~~~
