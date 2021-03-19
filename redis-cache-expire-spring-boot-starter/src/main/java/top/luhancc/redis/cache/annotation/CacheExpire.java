@@ -29,7 +29,7 @@ public @interface CacheExpire {
     long expire() default -1;
 
     /**
-     * 是否忽略 当设置为true时 此注册设置的任何操作都不会生效
+     * 是否忽略 当设置为true时 此注解设置的任何操作都不会生效
      *
      * @return
      */
