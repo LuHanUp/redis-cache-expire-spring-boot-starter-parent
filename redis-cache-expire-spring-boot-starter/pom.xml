@@ -12,7 +12,7 @@
     <description>使用redis作为spring cache组件，并且可以自定义过期时间</description>
 
     <artifactId>redis-cache-expire-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <dependencies>
         <dependency>

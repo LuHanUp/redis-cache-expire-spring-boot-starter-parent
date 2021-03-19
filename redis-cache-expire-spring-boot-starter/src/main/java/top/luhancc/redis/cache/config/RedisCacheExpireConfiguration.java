@@ -12,7 +12,7 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import top.luhancc.redis.cache.core.ExpireRedisCacheManager;
+import top.luhancc.redis.cache.core.RedisExpireCacheManager;
 import top.luhancc.redis.cache.core.RedisExpireCacheResolver;
 
 import java.lang.reflect.Field;
@@ -27,11 +27,13 @@ import java.lang.reflect.Field;
 public class RedisCacheExpireConfiguration extends CachingConfigurerSupport implements ApplicationContextAware {
     private final RedisCacheManager redisCacheManager;
     private final RedisConnectionFactory redisConnectionFactory;
-    private static volatile ExpireRedisCacheManager redisCacheManagerWrapper;
+    private static volatile RedisExpireCacheManager redisCacheManagerWrapper;
 
     private ApplicationContext applicationContext;
 
-    public RedisCacheExpireConfiguration(RedisCacheManager redisCacheManager, RedisConnectionFactory redisConnectionFactory, CacheOperationSource cacheOperationSource) {
+    public RedisCacheExpireConfiguration(RedisCacheManager redisCacheManager,
+                                         RedisConnectionFactory redisConnectionFactory,
+                                         CacheOperationSource cacheOperationSource) {
         this.redisCacheManager = redisCacheManager;
         this.redisConnectionFactory = redisConnectionFactory;
     }
@@ -41,7 +43,7 @@ public class RedisCacheExpireConfiguration extends CachingConfigurerSupport impl
         if (redisCacheManagerWrapper == null) {
             synchronized (RedisCacheExpireConfiguration.class) {
                 if (redisCacheManagerWrapper == null) {
-                    redisCacheManagerWrapper = new ExpireRedisCacheManager(redisCacheWriter(), redisCacheConfiguration());
+                    redisCacheManagerWrapper = new RedisExpireCacheManager(redisCacheWriter(), redisCacheConfiguration());
                 }
             }
         }
