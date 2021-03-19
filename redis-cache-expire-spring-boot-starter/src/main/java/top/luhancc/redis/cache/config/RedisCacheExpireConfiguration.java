@@ -1,6 +1,7 @@
 package top.luhancc.redis.cache.config;
 
 import org.springframework.beans.BeansException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.interceptor.CacheOperationSource;
@@ -24,6 +25,7 @@ import java.lang.reflect.Field;
  * @create 2021/3/18 10:03
  * @since 1.0.0
  */
+@ConditionalOnProperty(prefix = "spring.cache", value = "type", havingValue = "redis")
 public class RedisCacheExpireConfiguration extends CachingConfigurerSupport implements ApplicationContextAware {
     private final RedisCacheManager redisCacheManager;
     private final RedisConnectionFactory redisConnectionFactory;
