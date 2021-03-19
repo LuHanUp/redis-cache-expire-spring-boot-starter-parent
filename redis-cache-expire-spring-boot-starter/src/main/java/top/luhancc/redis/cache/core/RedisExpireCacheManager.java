@@ -19,14 +19,14 @@ import java.util.Map;
  * @create 2021/3/18 10:06
  * @since 1.0.0
  */
-public class ExpireRedisCacheManager extends RedisCacheManager {
-    private final Logger log = LoggerFactory.getLogger(ExpireRedisCacheManager.class);
+public class RedisExpireCacheManager extends RedisCacheManager {
+    private final Logger log = LoggerFactory.getLogger(RedisExpireCacheManager.class);
     private final RedisCacheConfiguration defaultCacheConfiguration;
     private final RedisCacheWriter cacheWriter;
 
     private Map<String, Cache> singletonCacheObjects = new HashMap<>();
 
-    public ExpireRedisCacheManager(RedisCacheWriter cacheWriter,
+    public RedisExpireCacheManager(RedisCacheWriter cacheWriter,
                                    RedisCacheConfiguration defaultCacheConfiguration) {
         super(cacheWriter, defaultCacheConfiguration);
         this.cacheWriter = cacheWriter;

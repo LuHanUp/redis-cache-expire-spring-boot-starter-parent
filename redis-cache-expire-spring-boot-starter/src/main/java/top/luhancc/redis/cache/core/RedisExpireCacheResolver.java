@@ -20,7 +20,12 @@ public class RedisExpireCacheResolver extends SimpleCacheResolver {
     public Collection<? extends Cache> resolveCaches(CacheOperationInvocationContext<?> context) {
         CacheOperationInvocationContextHolder.setContext(context);
         CacheExpire cacheExpire = AnnotationUtils.getAnnotation(context.getMethod(), CacheExpire.class);
-        CacheOperationInvocationContextHolder.setCacheExpire(cacheExpire);
+        if (cacheExpire == null) {
+            cacheExpire = AnnotationUtils.findAnnotation(context.getMethod().getDeclaringClass(), CacheExpire.class);
+        }
+        if (cacheExpire != null && !cacheExpire.ignore()) {
+            CacheOperationInvocationContextHolder.setCacheExpire(cacheExpire);
+        }
         return super.resolveCaches(context);
     }
 }
