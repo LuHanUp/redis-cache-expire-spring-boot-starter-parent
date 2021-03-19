@@ -40,9 +40,10 @@ public class RedisCacheExpireApplication {
     }
 }
 ~~~
+4. **在需要添加缓存过期时间的方法上添加`@CacheExpire`注解**
 
 #### 示例代码
-**方法级别**
+方法级别
 ~~~java
 @Service
 public class CacheService {
@@ -59,7 +60,7 @@ public class CacheService {
     }
 }
 ~~~
-**类级别**
+类级别
 ~~~java
 @CacheExpire
 @Cacheable(value = "cache-test2", key = "targetClass + methodName")

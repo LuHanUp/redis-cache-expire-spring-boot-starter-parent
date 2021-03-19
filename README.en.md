@@ -40,9 +40,10 @@ public class RedisCacheExpireApplication {
     }
 }
 ~~~
+4. **Add `@CacheExpire` annotation to the method that needs to add cache expiration time**
 
 #### example
-**method level**
+method level
 ~~~java
 @Service
 public class CacheService {
@@ -59,7 +60,7 @@ public class CacheService {
     }
 }
 ~~~
-**class level**
+class level
 ~~~java
 @CacheExpire
 @Cacheable(value = "cache-test2", key = "targetClass + methodName")
