@@ -28,6 +28,8 @@
     <artifactId>redis-cache-expire-spring-boot-starter</artifactId>
 </dependency>
 ~~~
+> 还没有放到maven中央仓库
+
 3.  和使用`spring cache`一样 使用`@EnableCaching`开启缓存即可
 ~~~java
 @SpringBootApplication
