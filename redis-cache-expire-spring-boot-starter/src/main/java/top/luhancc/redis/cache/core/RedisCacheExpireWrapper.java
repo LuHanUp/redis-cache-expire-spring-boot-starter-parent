@@ -89,7 +89,7 @@ public class RedisCacheExpireWrapper extends RedisCache {
         RedisCacheConfiguration redisCacheConfig = RedisCacheConfigurationUtils.expireRedisCacheConfig(defaultCacheConfig);
         // 设置过期时间
         if (redisCacheConfig != defaultCacheConfig) {
-            log.info("key:[{}]自定了过期时间:[{}]", key, redisCacheConfig.getTtl());
+            log.debug("key:[{}]自定了过期时间:[{}]", key, redisCacheConfig.getTtl());
         }
         cacheWriter.put(name, serializeCacheKey(createCacheKey(key)), serializeCacheValue(cacheValue), redisCacheConfig.getTtl());
         CacheOperationInvocationContextHolder.clear();

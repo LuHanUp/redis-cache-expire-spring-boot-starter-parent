@@ -24,7 +24,7 @@ public class RedisExpireCacheManager extends RedisCacheManager {
     private final RedisCacheConfiguration defaultCacheConfiguration;
     private final RedisCacheWriter cacheWriter;
 
-    private Map<String, Cache> singletonCacheObjects = new HashMap<>();
+    private final Map<String, Cache> singletonCacheObjects = new HashMap<>();
 
     public RedisExpireCacheManager(RedisCacheWriter cacheWriter,
                                    RedisCacheConfiguration defaultCacheConfiguration) {
@@ -36,13 +36,17 @@ public class RedisExpireCacheManager extends RedisCacheManager {
     @Override
     public Cache getCache(String name) {
         if (!singletonCacheObjects.containsKey(name)) {
-            Cache cache = super.getCache(name);
-            // 如果需要过期时间  就将cache进行包装下
-            if (needExpire()) {
-                cache = wrapExpire(cache);
+            synchronized (RedisExpireCacheManager.class) {
+                if (!singletonCacheObjects.containsKey(name)) {
+                    Cache cache = super.getCache(name);
+                    // 如果需要过期时间  就将cache进行包装下
+                    if (needExpire()) {
+                        cache = wrapExpire(cache);
+                    }
+                    singletonCacheObjects.put(name, cache);
+                    return cache;
+                }
             }
-            singletonCacheObjects.put(name, cache);
-            return cache;
         }
         return singletonCacheObjects.get(name);
     }
