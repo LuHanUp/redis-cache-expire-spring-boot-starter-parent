@@ -7,6 +7,7 @@
         <groupId>top.luhancc.redis</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>redis-cache-expire-example</artifactId>
@@ -15,7 +16,7 @@
         <dependency>
             <groupId>top.luhancc.redis</groupId>
             <artifactId>redis-cache-expire-spring-boot-starter</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
 
         <dependency>
